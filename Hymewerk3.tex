@@ -1,0 +1,43 @@
+\documentclass[a4paper]{article}
+
+\usepackage{fontspec}
+\usepackage{mathpazo}
+\setmainfont
+     [ BoldFont       = texgyrepagella-bold.otf ,
+       ItalicFont     = texgyrepagella-italic.otf ,
+       BoldItalicFont = texgyrepagella-bolditalic.otf ]
+     {texgyrepagella-regular.otf}
+\setmainfont{Gill Sans MT}
+
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage{physics}
+
+%\DeclareMathOperator{\Tr}{Tr}
+
+\title{Homework 3 : Aircraft Collision Avoidance Analyses using Reachability}
+
+\author{David McPherson}
+
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section{Linear Velocity Control}
+Consider a system of two planes (Dubin's vehicles) on a collision course.
+Our two planes can only control their linear velocity and cannot escape into a veering mode.
+Our system with no turning and using relative coordinates only is:
+
+\begin{align*}
+     \dot{x}_r    &= -u + d cos(\psi_r)
+  \\ \dot{y}_r    &=  d sin(\psi_r)
+  \\ \dot{\psi}_r &=  0
+\end{align*}
+
+\section{Mode Switching Control}
+
+\end{document}
