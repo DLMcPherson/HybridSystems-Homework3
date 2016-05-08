@@ -42,6 +42,8 @@ We can use Ian Mitchell's "Toolbox of Level Set Methods" to perform reachability
 We will modify the default example Matlab script "air3D" that comes with his ToolboxLS.
 We will need to change the functions defining the Hamiltonian ("air3DHamFunc") and the Hamiltonian's maximum partials ("air3DPartialFunc").
 
+\subsection{MATLAB Function: HamFunc}
+
 We need to find the optimal Hamiltonian so we can program it into the "air3DHamFunc" function.
 Let us recast the bounds on the controls $u$ and $d$ as:
 
@@ -71,7 +73,7 @@ This allows us to decouple the effects of the input and output and optimize each
    The corresponding (non-optimum) Hamiltonian is:
 
 \begin{align*}
-  H(z,p,u,d) = \underset{u}{\max} \underset{d}{min} p^T f(z,u,d) = \underset{u}{\max} \underset{d}{min} [ -p_1 u + (p_1 cos(\psi_r) + p_2 sin(\psi_r)) d ]
+  \underset{u}{\max} \underset{d}{\min} H(z,p,u,d) =  p^T f(z,u,d) = -p_1 u + (p_1 cos(\psi_r) + p_2 sin(\psi_r)) d
 \end{align*}
 
 The optimum controls will always push the boundary of their set, depending on the sign of their coefficient.
@@ -83,6 +85,53 @@ Thus we can obtain expressions for the ideal controls $u$ and $d$ as:
   u^* &= c_u + o_u sign(-p_1) \\
   d^* &= c_d + o_d sign(p_1 cos(\psi_r) + p_2 sin(\psi_r))
 \end{align*}
+
+Using these optimal controls in the Hamiltonian retursn the Optimal Hamiltonian as:
+
+\begin{equation}
+  H^*(z,p) = \underset{u}{\max} \underset{d}{\min} H(z,p,u,d) = H(z,p,u^*,d^*)
+  = -c_u p_1 + o_u | p_1 |
+  + (p_1 cos(\psi_r) + p_2 sin(\psi_r)) c_d - o_d |p_1 cos(\psi_r) + p_2 sin(\psi_r)|
+\end{equation}
+
+This is the Hamiltonian that was used in the $air3DHamFunc$ Matlab script.
+
+\subsection{MATLAB Function: PartialHamFunc}
+The second utility functions the Lax Friedrichs approximation requires for simulating the reachable set is a function which approximates:
+
+$$
+\alpha_i(z) = \underset{p}{\max} \left| \frac{\delta}{\delta p_i} H^*(z,p) \right|
+$$
+
+\subsection{Results}
+With the requisite utility MATLAB functions defined corresponding to the particualars of our problem, our script is ready to roll.
+The generated sets that reach the unsafe set are shown in the following figures for four different relative angles.
+
+\begin{figure}[!ht]
+  \centering
+  \begin{minipage}[b]{0.4\textwidth}
+    \includegraphics[width=1.0\textwidth]{velCont_psi1.eps}
+    \caption{Unsafe set for Relative Angle $\psi_r = \frac{\pi}{2}$}
+  \end{minipage}
+  \hfill
+  \begin{minipage}[b]{0.4\textwidth}
+    \includegraphics[width=1.0\textwidth]{velCont_psi13.eps}
+    \caption{Unsafe set for Relative Angle $\psi_r = 0$}
+  \end{minipage}
+\end{figure}
+
+\begin{figure}[!ht]
+  \centering
+  \begin{minipage}[b]{0.4\textwidth}
+    \includegraphics[width=1.0\textwidth]{velCont_psi37.eps}
+    \caption{Unsafe set for Relative Angle $\psi_r = -\frac{\pi}{2}$}
+  \end{minipage}
+  \hfill
+  \begin{minipage}[b]{0.4\textwidth}
+    \includegraphics[width=1.0\textwidth]{velCont_psi43.eps}
+    \caption{Unsafe set for Relative Angle $\psi_r = -\frac{\pi}{4}$}
+  \end{minipage}
+\end{figure}
 
 As the time horizon $T \rightarrow \infty$ the reachable set reached a fixed point and ceased to expand.
 
