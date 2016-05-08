@@ -28,15 +28,46 @@
 \maketitle
 
 \section{Linear Velocity Control}
-Consider a system of two planes (Dubin's vehicles) on a collision course.
+Consider a system of two airplanes (Dubin's vehicles) careening through the sky on a collision course.
 Our two planes can only control their linear velocity and cannot escape into a veering mode.
-Our system with no turning and using relative coordinates only is:
+This no-turning system defined in terms of relative coordinates is:
 
 \begin{align*}
      \dot{x}_r    &= -u + d cos(\psi_r)
   \\ \dot{y}_r    &=  d sin(\psi_r)
   \\ \dot{\psi}_r &=  0
 \end{align*}
+
+We can use Ian Mitchell's "Toolbox of Level Set Methods" to perform reachability analysis on this system.
+We will modify the default example Matlab script "air3D" that comes with his ToolboxLS.
+We will need to change the functions defining the Hamiltonian ("air3DHamFunc") and the Hamiltonian's maximum partials ("air3DPartialFunc").
+
+We need to find the optimal Hamiltonian so we can program it into the "air3DHamFunc" function.
+Let us recast the bounds on the controls $u$ and $d$ as:
+
+\begin{align*}
+  \underline{v_1} &= c_u - o_u \\
+  \bar{v_1}       &= c_u + o_u \\
+  \underline{v_1} &= c_d - o_d \\
+  \bar{v_1}       &= c_d + o_d \\
+\end{align*}
+
+So that $c_u$ is the center of the region $U$ and $o_u$ is the offset from the center to either end of the interval $U$.
+Accordingly, $c_d$ is the center of $D$ and $o_d$ is the offset to either end of $D$.
+
+Now, note that the system dynamics can be re-cast into a control-affine form:
+
+\begin{align*}
+  \dot{z}
+  =
+  \left[\begin{matrix} \dot{x}_r \\ \dot{y}_r \\ \dot{\psi}_r \end{matrix}\right]
+  =
+  \left[\begin{matrix} -u + d cos(\psi_r) \\ d sin(\psi_r) \\ 0 \end{matrix}\right]
+  =
+  \left[ \begin{matrix} 0 \\ 0 \\ 0 \end{matrix}\right] + \left[ \begin{matrix}-1 \\ 0 \\ 0\end{matrix}\right] u +\left[\begin{matrix} cos(\psi_r) \\ sin(\psi_r) \\ 0 \end{matrix}\right] d
+\end{align*}
+
+As the time horizon $T \rightarrow \infty$ the reachable set reached a fixed point and ceased to expand.
 
 \section{Mode Switching Control}
 
