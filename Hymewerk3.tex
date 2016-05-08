@@ -73,7 +73,7 @@ This allows us to decouple the effects of the input and output and optimize each
    The corresponding (non-optimum) Hamiltonian is:
 
 \begin{align*}
-  \underset{u}{\max} \underset{d}{\min} H(z,p,u,d) =  p^T f(z,u,d) = -p_1 u + (p_1 cos(\psi_r) + p_2 sin(\psi_r)) d
+  \underset{u}{\max} \hspace{2 mm} \underset{d}{\min} H(z,p,u,d) =  p^T f(z,u,d) = -p_1 u + (p_1 cos(\psi_r) + p_2 sin(\psi_r)) d
 \end{align*}
 
 The optimum controls will always push the boundary of their set, depending on the sign of their coefficient.
@@ -83,16 +83,16 @@ Thus we can obtain expressions for the ideal controls $u$ and $d$ as:
 
 \begin{align*}
   u^* &= c_u + o_u sign(-p_1) \\
-  d^* &= c_d + o_d sign(p_1 cos(\psi_r) + p_2 sin(\psi_r))
+  d^* &= c_d + o_d sign(p_1 \cos(\psi_r) + p_2 \sin(\psi_r))
 \end{align*}
 
 Using these optimal controls in the Hamiltonian retursn the Optimal Hamiltonian as:
 
-\begin{equation}
-  H^*(z,p) = \underset{u}{\max} \underset{d}{\min} H(z,p,u,d) = H(z,p,u^*,d^*)
-  = -c_u p_1 + o_u | p_1 |
-  + (p_1 cos(\psi_r) + p_2 sin(\psi_r)) c_d - o_d |p_1 cos(\psi_r) + p_2 sin(\psi_r)|
-\end{equation}
+\begin{align}
+  H^*(z,p) &= \underset{u}{\max} \hspace{2 mm} \underset{d}{\min} H(z,p,u,d) = H(z,p,u^*,d^*)
+  \\       &= -c_u p_1 + o_u | p_1 |
+  + (p_1 cos(\psi_r) + p_2 sin(\psi_r)) c_d - o_d |p_1 \cos(\psi_r) + p_2 \sin(\psi_r)|
+\end{align}
 
 This is the Hamiltonian that was used in the $air3DHamFunc$ Matlab script.
 
@@ -101,6 +101,37 @@ The second utility functions the Lax Friedrichs approximation requires for simul
 
 $$
 \alpha_i(z) = \underset{p}{\max} \left| \frac{\delta}{\delta p_i} H^*(z,p) \right|
+$$
+
+Although actually taking the maximum over $p$ can be difficult (especially since our controls depend on $p$ discontinuously), we can still approximate $\alpha_i$ by using an upper bound as an over approximation.
+Overapproximating this term corresponds to an artificial dissipation being added to the system, which is preferable to underestimation.
+
+We will derive a general over approximation for any system in a control affine form (like the one we cast our system into).
+
+\begin{align*}
+  H(x,p,u,d) = p^T f(x,u,d) = p^T F(x) + p^T F^u(x) u + p^T F^d(x) d
+\end{align*}
+\begin{align*}
+  \frac{\delta}{\delta p_i} H(x,p,u,d) = f_i(x,u,d) = F_i(x) + F^u_i(x) u + F^d_i(x) d
+\end{align*}
+\begin{align*}
+  \left|\frac{\delta}{\delta p_i} H(x,p,u,d)\right| &= |f_i(x,u,d)| = |F_i(x) + F^u_i(x) u + F^d_i(x) d|
+   \\ &\leq |F_i(x)| + |F^u_i(x)| |u| + |F^d_i(x)| |d|
+   \\ &\leq |F_i(x)| + |F^u_i(x)| U^{max} + |F^d_i(x)| D^{max}
+\end{align*}
+
+where $U^{max}  = \max{|c_u+o_u| , |c_u-o_u|}$ and $D^{max}  = \max{|c_d+o_d| , |c_d-o_d|}$
+
+Plugging in our particular control-affine system we obtain upper-bound estimates of our $\alpha_i$ as:
+
+$$
+\alpha_1 \leq U^{max} + D^{max} |\cos(\psi_r)|
+$$
+$$
+\alpha_2 \leq D^{max} |\sin(\psi_r)|
+$$
+$$
+\alpha_3 = 0
 $$
 
 \subsection{Results}
@@ -136,5 +167,22 @@ The generated sets that reach the unsafe set are shown in the following figures 
 As the time horizon $T \rightarrow \infty$ the reachable set reached a fixed point and ceased to expand.
 
 \section{Mode Switching Control}
+Reachability analysis within mode 2 (turn mode) shows that for larger radii, the arc of the ''macaroni'' increases as well (see Figures 5-6).
+\begin{figure}[!ht]
+  \centering
+  \begin{minipage}[b]{0.4\textwidth}
+    \includegraphics[width=1.0\textwidth]{HyAvoid3.eps}
+    \caption{Unsafe set for Mode 2 (avoid mode) with Turning Radius 3}
+  \end{minipage}
+  \hfill
+  \begin{minipage}[b]{0.4\textwidth}
+    \includegraphics[width=1.0\textwidth]{HyAvoid8.eps}
+    \caption{Unsafe set for Mode 2 (avoid mode) with Turning Radius 8}
+  \end{minipage}
+\end{figure}
+
+The final unsafe set is the set of states that can reach the unsafe disk while staying within the ''macaroni'' created by possible controlled safe transitions to the ''avoid'' mode.
+
+MORE WORK NEEDED HERE. INCLUDE ILLUSTRATIONS OF THE UNSAFE SET BEING A BLEEDOVER.
 
 \end{document}
