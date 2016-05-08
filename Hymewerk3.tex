@@ -67,6 +67,23 @@ Now, note that the system dynamics can be re-cast into a control-affine form:
   \left[ \begin{matrix} 0 \\ 0 \\ 0 \end{matrix}\right] + \left[ \begin{matrix}-1 \\ 0 \\ 0\end{matrix}\right] u +\left[\begin{matrix} cos(\psi_r) \\ sin(\psi_r) \\ 0 \end{matrix}\right] d
 \end{align*}
 
+This allows us to decouple the effects of the input and output and optimize each individually.
+   The corresponding (non-optimum) Hamiltonian is:
+
+\begin{align*}
+  H(z,p,u,d) = \underset{u}{\max} \underset{d}{min} p^T f(z,u,d) = \underset{u}{\max} \underset{d}{min} [ -p_1 u + (p_1 cos(\psi_r) + p_2 sin(\psi_r)) d ]
+\end{align*}
+
+The optimum controls will always push the boundary of their set, depending on the sign of their coefficient.
+For example, for $u$ to maximize the Hamiltonian it should assume it's minimum value when it's coefficient is negative ($-p_1 < 0)$, and $u$ should assume it's maximum value when it's coefficient $-p_1 > 0$.
+The converse is true for $d$ as it seeks to minimize the Hamiltonian.
+Thus we can obtain expressions for the ideal controls $u$ and $d$ as:
+
+\begin{align*}
+  u^* &= c_u + o_u sign(-p_1) \\
+  d^* &= c_d + o_d sign(p_1 cos(\psi_r) + p_2 sin(\psi_r))
+\end{align*}
+
 As the time horizon $T \rightarrow \infty$ the reachable set reached a fixed point and ceased to expand.
 
 \section{Mode Switching Control}
