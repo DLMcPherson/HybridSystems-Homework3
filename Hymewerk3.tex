@@ -141,12 +141,12 @@ The generated sets that reach the unsafe set are shown in the following figures 
 \begin{figure}[!ht]
   \centering
   \begin{minipage}[b]{0.4\textwidth}
-    \includegraphics[width=1.0\textwidth]{velCont_psi1.eps}
+    \includegraphics[width=1.0\textwidth]{velCont_psi13.eps}
     \caption{Unsafe set for Relative Angle $\psi_r = \frac{\pi}{2}$}
   \end{minipage}
   \hfill
   \begin{minipage}[b]{0.4\textwidth}
-    \includegraphics[width=1.0\textwidth]{velCont_psi13.eps}
+    \includegraphics[width=1.0\textwidth]{velCont_psi1.eps}
     \caption{Unsafe set for Relative Angle $\psi_r = 0$}
   \end{minipage}
 \end{figure}
@@ -167,22 +167,24 @@ The generated sets that reach the unsafe set are shown in the following figures 
 As the time horizon $T \rightarrow \infty$ the reachable set reached a fixed point and ceased to expand.
 
 \section{Mode Switching Control}
-Reachability analysis within mode 2 (turn mode) shows that for larger radii, the arc of the ''macaroni'' increases as well (see Figures 5-6).
+Reachability analysis within mode 2 (turn mode) shows that for larger radii, the arc of the controllable predecessor's complement (hereby referred to in shorthand as the ''macaroni'') increases as well (see Figures 5-6).
 \begin{figure}[!ht]
   \centering
   \begin{minipage}[b]{0.4\textwidth}
-    \includegraphics[width=1.0\textwidth]{HyAvoid3.eps}
+    \includegraphics[width=1.0\textwidth]{HyAvoid3over.eps}
     \caption{Unsafe set for Mode 2 (avoid mode) with Turning Radius 3}
   \end{minipage}
   \hfill
   \begin{minipage}[b]{0.4\textwidth}
-    \includegraphics[width=1.0\textwidth]{HyAvoid8.eps}
+    \includegraphics[width=1.0\textwidth]{HyAvoid8over.eps}
     \caption{Unsafe set for Mode 2 (avoid mode) with Turning Radius 8}
   \end{minipage}
 \end{figure}
 
-The final unsafe set is the set of states that can reach the unsafe disk while staying within the ''macaroni'' created by possible controlled safe transitions to the ''avoid'' mode.
-
-MORE WORK NEEDED HERE. INCLUDE ILLUSTRATIONS OF THE UNSAFE SET BEING A BLEEDOVER.
+The final unsafe set is the set of states that can reach the unsafe disk while avoiding the controllable predecessor (that is, everything outside the ''macaroni'').
+This unsafe set is depicted in Figures 5 and 6 as the shaded region.
+Note that when the ''macaroni'' bends more (due to the larger radius turns) it cuts off more of the unsafe set.
+Thus, the unsafe set shrinks with larger turn radius.
+This makes intuitive sense, since a larger turning arc gives the planes more of a gap between the planes creating more of a ''cushion''.
 
 \end{document}
